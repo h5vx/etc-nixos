@@ -1,16 +1,39 @@
 { config, pkgs, ... }:
 {
-  # Unstable
-  # fonts.fonts = with pkgs; [
-  #   (nerdfonts.override {
-  #     fonts = [ "JetBrainsMono" ];
-  #   })
-  # ];
+  fonts.fonts = with pkgs; [
+    # Unstable
+    # (nerdfonts.override {
+    #   fonts = [ "JetBrainsMono" ];
+    # })
+    # www.ephifonts.com doesn't respond
+    # helvetica-neue-lt-std
+  ];
+  
+  programs.zsh = {
+    enable = true;
+    shellAliases = {
+      ls = "exa -b --git --icons --group-directories-first";
+      l = "ls -lah";
+    };
+    ohMyZsh.enable = true;
+    ohMyZsh.theme = "refined";
+    ohMyZsh.plugins = [
+        "ansible"
+        "battery"
+        # "fzf"
+        "git"
+        "zsh-autosuggestions"
+    ];
+    ohMyZsh.customPkgs = [
+      pkgs.zsh-autosuggestions
+      pkgs.nix-zsh-completions
+    ];
+  };
 
   # List packages installed in system profile
   environment.systemPackages = with pkgs; [
-    curl
-    wget 
+    curl 
+    wget
     htop
     telnet
     vim

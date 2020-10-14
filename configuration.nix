@@ -12,6 +12,8 @@
       ./users/h5v.nix
     ];
 
+  _module.args.expr = import ./expr { inherit pkgs; };
+
   boot.loader = {
     # Timeout (in seconds) until loader boots the default menu item
     timeout = 3;  
@@ -97,12 +99,12 @@
   # services.blueman.enable = true;
 
   # Bluetooth headset media control
-  # systemd.user.services.mpris-proxy = {
-  #   Unit.Description = "Mpris proxy";
-  #   Unit.After = [ "network.target" "sound.target" ];
-  #   Service.ExecStart = "${pkgs.bluez}/bin/mpris-proxy";
-  #   Install.WantedBy = [ "default.target" ];
-  # };
+  systemd.user.services.mpris-proxy = {
+    description = "Mpris proxy";
+    after = [ "network.target" "sound.target" ];
+    script = "${pkgs.bluez}/bin/mpris-proxy";
+    wantedBy = [ "default.target" ];
+  };
 
   # Enable the X11 windowing system.
   services.xserver = {

@@ -1,0 +1,38 @@
+diff --git a/Makefile b/Makefile
+index 57841a7..d3e1ba8 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,8 +1,10 @@
++PREFIX = /usr
++
+ all:
+ 	gcc editor.c -pedantic -Wall -Wextra \
+-		`pkg-config --cflags mcabber` -std=c99 \
++		`pkg-config --cflags mcabber glib-2.0` -std=c99 \
+ 		-shared -DMODULES_ENABLE  -fPIC\
+ 		-o libeditor.so
+ 
+ install:
+-	install -D libeditor.so /usr/lib/mcabber/libeditor.so
++	install -D libeditor.so $(PREFIX)/lib/mcabber/libeditor.so
+diff --git a/editor.c b/editor.c
+index 823ec80..4d79f05 100644
+--- a/editor.c
++++ b/editor.c
+@@ -56,14 +56,14 @@ static void do_esay(char *arg) {
+     char temp_file_path[] = "/tmp/mcabber-XXXXXX";
+     int temp_file_fd = mkstemp(temp_file_path);
+     if (!temp_file_fd) {
+-        scr_LogPrint(LPRINT_NORMAL, strerror(errno));
++        scr_LogPrint(LPRINT_NORMAL, "%s", strerror(errno));
+         return;
+     }
+ 
+     pid_t child = fork();
+     if (child == 0) {
+         execlp(editor, editor, temp_file_path, NULL);
+-        scr_LogPrint(LPRINT_NORMAL, strerror(errno));
++        scr_LogPrint(LPRINT_NORMAL, "%s", strerror(errno));
+         return;
+     } else {
+         waitpid(child, NULL, 0);
