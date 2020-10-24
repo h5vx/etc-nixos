@@ -1,13 +1,15 @@
-{ config, pkgs, ... }:
+{ config, pkgs, expr, ... }:
 {
   fonts.fonts = with pkgs; [
     # Unstable
     # (nerdfonts.override {
     #   fonts = [ "JetBrainsMono" ];
     # })
-    # www.ephifonts.com doesn't respond
-    # helvetica-neue-lt-std
+    jetbrains-mono
+    terminus_font
   ];
+
+  programs.adb.enable = true;
   
   programs.zsh = {
     enable = true;
@@ -15,18 +17,23 @@
       ls = "exa -b --git --icons --group-directories-first";
       l = "ls -lah";
     };
+
+    autosuggestions.enable = true;
+    syntaxHighlighting.enable = true;
+
     ohMyZsh.enable = true;
-    ohMyZsh.theme = "refined";
+    ohMyZsh.theme = "spaceship";
     ohMyZsh.plugins = [
         "ansible"
         "battery"
         # "fzf"
+        "pyenv"
         "git"
-        "zsh-autosuggestions"
+        "colored-man-pages"
     ];
-    ohMyZsh.customPkgs = [
-      pkgs.zsh-autosuggestions
-      pkgs.nix-zsh-completions
+    ohMyZsh.customPkgs = with pkgs; [
+      spaceship-prompt
+      zsh-history-substring-search
     ];
   };
 
@@ -40,7 +47,14 @@
     tmux
     entr
     ncdu
-    terminus_font
+    lnav
+    file
+
+    unrar
+    zip unzip
+    p7zip
+
+    gnome3.gnome-tweaks
 
     usbutils   # lsusb
     pciutils   # lspci
@@ -52,6 +66,7 @@
     docker
     docker-compose
     silver-searcher
+    libmysqlclient
 
     (python37.withPackages(ps: with ps; [
       pip

@@ -7,6 +7,13 @@
   nixpkgs.config.allowUnfree = true;
 
   home-manager.users.h5v = {
+    programs.rofi = {
+      enable = true;
+      package = pkgs.rofi.override { 
+        plugins = [ pkgs.rofi-emoji ]; 
+      };
+    };
+
     programs.vim = {
       enable = true;
       plugins = with pkgs.vimPlugins; [ 
@@ -14,6 +21,7 @@
         solarized
         vim-airline 
         vim-nix
+        gitgutter
         LanguageClient-neovim
       ];
       settings = { ignorecase = true; };
@@ -38,14 +46,13 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.h5v = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker" ];
+    extraGroups = [ "wheel" "docker" "adbusers" ];
     shell = pkgs.zsh;
     packages = with pkgs; [
-      # Browsers / Viewers
-      firefox
-      chromium
-      surf
-      zeal
+      # Browsers
+      firefox chromium surf
+
+      # Image viewers / editors
       sxiv
       zathura
       libreoffice-fresh
@@ -54,9 +61,7 @@
       inkscape
 
       # Players
-      mpv
-      cmus
-      mps-youtube
+      mpv cmus mps-youtube rhythmbox
 
       # Downloaders
       qbittorrent
@@ -65,28 +70,37 @@
       slack
       mcabber expr.mcabber-editor
       tdesktop   # Telegram
+      konversation
       thunderbird
       zoom-us
       
-      # Utils
-      flameshot  # screenshots
-      rofi       # launcher
-      keepassxc
-      exa        # ls replacement
-      taskwarrior ptask
-      playerctl
+      # Utils / No GUI
+      xclip       # manipulate X clipboard
+      exa         # ls replacement
+      taskwarrior # task tracker
+      playerctl   # Control players via MPRIS
+      tig         # git CUI
+      tmux        # terminal multiplexer
+      github-cli
+      ncdu        # analyze disk space
+      neofetch
+      nixfmt      # nix formatter
+      translate-shell
+
+      # Utils / GUI
+      zeal        # Documentation browser
+      flameshot   # screenshots
+      keepassxc   # password manager
+      ptask       # taskwarrior GUI
 
       # File managers
       ranger
 
       # Terminals
-      kitty
-      tilda
-      tmux
+      kitty tilda 
       
       # Dev
       jetbrains.pycharm-professional
-      python27Packages.virtualenv
 
       # Applets / WM tools
       xxkb
@@ -95,6 +109,7 @@
       picom
       xss-lock
       i3lock-fancy
+      xorg.xmodmap
 
       # Appearance
       papirus-icon-theme

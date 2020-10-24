@@ -28,6 +28,13 @@
   };
 
   networking.hostName = "mistle";
+  networking.hosts = {
+    "127.0.0.1" = [
+      "123.farfor.local"
+      "ufa.farfor.local"
+    ];
+  };
+
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   networking.networkmanager.enable = true;
@@ -55,17 +62,19 @@
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  #   pinentryFlavor = "gnome3";
-  # };
+  programs.mtr.enable = true;
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+    pinentryFlavor = "qt";
+  };
 
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
+
+  services.gvfs.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -99,12 +108,12 @@
   # services.blueman.enable = true;
 
   # Bluetooth headset media control
-  systemd.user.services.mpris-proxy = {
-    description = "Mpris proxy";
-    after = [ "network.target" "sound.target" ];
-    script = "${pkgs.bluez}/bin/mpris-proxy";
-    wantedBy = [ "default.target" ];
-  };
+  # systemd.user.services.mpris-proxy = {
+  #   description = "Mpris proxy";
+  #   after = [ "network.target" "sound.target" ];
+  #   script = "/run/current-system/sw/bin/mpris-proxy";
+  #   wantedBy = [ "default.target" ];
+  # };
 
   # Enable the X11 windowing system.
   services.xserver = {
@@ -117,8 +126,10 @@
   services.xserver.libinput.enable = true;
 
   # Enable the KDE Desktop Environment.
-  services.xserver.displayManager.lightdm.enable = true;
-  # services.xserver.desktopManager.plasma5.enable = true;
+  services.xserver.displayManager.lightdm = {
+    enable = true;
+    greeters.pantheon.enable = true;
+  };
 
   services.xserver.desktopManager.gnome3.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
